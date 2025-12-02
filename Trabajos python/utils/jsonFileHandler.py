@@ -1,4 +1,4 @@
-from json import dumps, load, decoder
+from json import dumps, load
 
 def readFile(fileName):
     try:
@@ -15,4 +15,5 @@ def saveFile(fileName, data):
     jsonFile = open(fileName, "w")
     jsonFile.write(dumps(data))
     jsonFile.close()
-    print("Datos guardados con exito")
+    print("Nuevo gasto guardado con exito")
+    

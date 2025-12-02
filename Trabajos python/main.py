@@ -1,8 +1,8 @@
 
 from utils.menus import *
 from utils.jsonFileHandler import *
-
-GASTOS_FILE = "./database/gastosT.json"
+from tabulate import tabulate
+GASTOS_FILE = "/home/camper/Documentos/modulosAR/primer dia/Proyecto-python/Trabajos python/database/gastosT.json"
 
 options = (
     "Registrar nuevo gasto",
@@ -10,6 +10,26 @@ options = (
     "Calcular total de gastos",
     "Generar reporte de gastos",
     "Salir"
+)
+
+options2 = (
+    "Ver todos los gastos",
+    "Filtrar gastos por categoria",
+    "Filtrar gastos por rango de fechas",
+    "Volver al menu principal"
+)
+
+options3 = (
+    "Calcular total diario",
+    "Calcular total semanal",
+    "Calcular total mensual",
+    "Regresar al menu principal"
+)
+options4 = (
+    "Reporte diario",
+    "Reporte semanal",
+    "Reporte mensual",
+    "Volver al menu principal"
 )
 while True:
     choice =menu_principal("Simulador de Gastos Personales", options)
@@ -45,9 +65,12 @@ while True:
                 else :
                         print("Categoria no valida. Intente de nuevo.")
                     
-
-            descripcion_ingresada = str(input("Ingrese una descripcion del gasto:  "))   
-            fecha_ingresada = str(input("Ingrese la fecha del gasto (DD/MM/AAAA): "))
+            try:
+                descripcion_ingresada = str(input("Ingrese una descripcion del gasto:  "))   
+                
+                fecha_ingresada = str(input("Ingrese la fecha del gasto (DD/MM/AAAA): "))
+            except ValueError:
+                print("Error: Entrada invalida. Intente de nuevo.")
             registro= {
                 "Monto": monto_ingresado,
                 "Categoria": categoria_ingresada,
@@ -57,4 +80,78 @@ while True:
             dataGastos = readFile(GASTOS_FILE)
             dataGastos.append(registro)
             saveFile(GASTOS_FILE, dataGastos)
-      # case 2:    
+            limpiar_pantalla()    
+        case 2:    
+            while True:
+                choice=(listar_gastos("Listado de Gastos", options2))
+                limpiar_pantalla()
+                match choice:
+                    case 1:
+                        print("="*45)
+                        print("----------- Todos los Gastos ------------")
+                        print("="*45)
+                        dataGastos = readFile(GASTOS_FILE)
+                        if not dataGastos:
+                            print("No hay gastos registrados.")
+                        else:
+                            tabla_datos =[]
+                            for gasto in dataGastos:
+                                tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
+                            print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
+                            input("Presione Enter para volver al menu...")  
+                            limpiar_pantalla()
+                    case 2:
+                        print("="*45)
+                        print("------- Filtrar Gastos por Categoria -------")
+                        print("="*45)
+                        categoria_filtro = input("Ingrese la categoria para filtrar (Comida, Transporte, Gastos personales, Salud, Otros): ")
+                        dataGastos = readFile(GASTOS_FILE)      
+                            
+                    case 3:
+                        print("="*45)
+                        print("----- Filtrar Gastos por Rango de Fechas -----")
+                        print("="*45)
+                    case 4:
+                        break
+        case 3:
+            while True:
+                choice = calcular_total_gastos("Calcular Total de Gastos", options3)
+                limpiar_pantalla()
+                match choice:
+                    case 1:
+                        print("="*45)
+                        print("--------- Calcular Total Diario ---------")
+                        print("="*45)
+                    case 2:
+                        print("="*45)
+                        print("-------- Calcular Total Semanal --------")
+                        print("="*45)
+                    case 3:
+                        print("="*45)
+                        print("-------- Calcular Total Mensual --------")
+                        print("="*45)   
+                    case 4:
+                        break    
+        case 4:
+            while True:               
+                choice = generar_reporte("Generar Reporte de Gastos", options4)
+                limpiar_pantalla()
+                match choice:
+                    case 1:     
+                        print("="*45)
+                        print("----------- Reporte Diario ------------")
+                        print("="*45)
+                    case 2:
+                        print("="*45)
+                        print("---------- Reporte Semanal -----------")    
+                        print("="*45)
+                    case 3:
+                        print("="*45)
+                        print("---------- Reporte Mensual -----------")
+                        print("="*45)   
+                    case 4:
+                        break    
+        case 5:
+            print("Gracias por usar el simulador de gastos personales. ¡Hasta luego!")
+            break
+ 
