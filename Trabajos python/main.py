@@ -2,7 +2,7 @@
 from utils.menus import *
 from utils.jsonFileHandler import *
 from tabulate import tabulate
-GASTOS_FILE = "/home/camper/Documentos/modulosAR/primer dia/Proyecto-python/Trabajos python/database/gastosT.json"
+GASTOS_FILE = "gastos.json"
 
 options = (
     "Registrar nuevo gasto",
@@ -38,7 +38,7 @@ while True:
         case 1: 
             
             print("="*45)
-            print("----------- Registar Nuevo Gasto ------------")
+            print("----------- Registrar Nuevo Gasto ------------")
             print("="*45)
             while True:
                 try:    
@@ -65,12 +65,17 @@ while True:
                 else :
                         print("Categoria no valida. Intente de nuevo.")
                     
-            try:
-                descripcion_ingresada = str(input("Ingrese una descripcion del gasto:  "))   
+            
+            descripcion_ingresada = str(input("Ingrese una descripcion del gasto:  "))   
+
+
+            while True:
+                fecha_ingresada = input("Ingrese la fecha del gasto (DD/MM/AAAA): ")
+                if validar_fecha(fecha_ingresada):
+                    break
+                else:
+                    print("Error: Formato de fecha invalido. Use DD/MM/AAAA")  
                 
-                fecha_ingresada = str(input("Ingrese la fecha del gasto (DD/MM/AAAA): "))
-            except ValueError:
-                print("Error: Entrada invalida. Intente de nuevo.")
             registro= {
                 "Monto": monto_ingresado,
                 "Categoria": categoria_ingresada,
@@ -104,8 +109,21 @@ while True:
                         print("="*45)
                         print("------- Filtrar Gastos por Categoria -------")
                         print("="*45)
-                        categoria_filtro = input("Ingrese la categoria para filtrar (Comida, Transporte, Gastos personales, Salud, Otros): ")
-                        dataGastos = readFile(GASTOS_FILE)      
+                        categoria_filtro = input("Ingrese cual categoria (Comida, Transporte, Gastos personales, Salud, Otros): ")
+                        dataGastos = readFile(GASTOS_FILE)
+                        gastos_filtrados = [gasto for gasto in dataGastos if gasto['Categoria'].lower() == categoria_filtro.lower()]
+
+                        if not gastos_filtrados:
+                            print(f"No hay gastos registrados en la categoria '{categoria_filtro}'.")
+                        else:
+                            tabla_datos =[]
+                            for gasto in gastos_filtrados:
+                                tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
+                            print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
+                            input("Presione Enter para volver al menu...")  
+                            limpiar_pantalla()
+
+
                             
                     case 3:
                         print("="*45)
@@ -122,6 +140,8 @@ while True:
                         print("="*45)
                         print("--------- Calcular Total Diario ---------")
                         print("="*45)
+                        dataGastos = readFile(GASTOS_FILE)
+                        
                     case 2:
                         print("="*45)
                         print("-------- Calcular Total Semanal --------")

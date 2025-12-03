@@ -1,4 +1,5 @@
 import os
+from datetime import datetime   
 def menu_principal(title, options):
     choise = 0
     index = 1
@@ -89,3 +90,10 @@ def generar_reporte(title, options4):
         except ValueError:
             print("Su eleccion debe ser un numero...")
     return choise
+
+def validar_fecha(fecha_str):
+    """Valida y convierte una fecha en formato DD/MM/AAAA"""
+    try:
+        return datetime.strptime(fecha_str, "%d/%m/%Y")
+    except ValueError:
+        return None
