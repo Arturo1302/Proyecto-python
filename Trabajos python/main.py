@@ -2,7 +2,7 @@
 from utils.menus import *
 from utils.jsonFileHandler import *
 from tabulate import tabulate
-GASTOS_FILE = "gastos.json"
+GASTOS_FILE = "./database/gastos.json"
 
 options = (
     "Registrar nuevo gasto",
@@ -66,7 +66,7 @@ while True:
                         print("Categoria no valida. Intente de nuevo.")
                     
             
-            descripcion_ingresada = str(input("Ingrese una descripcion del gasto:  "))   
+            descripcion_ingresada = input("Ingrese una descripcion del gasto:  ")
 
 
             while True:
