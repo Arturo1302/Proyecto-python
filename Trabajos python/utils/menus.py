@@ -97,3 +97,9 @@ def validar_fecha(fecha_str):
         return datetime.strptime(fecha_str, "%d/%m/%Y")
     except ValueError:
         return None
+
+def validar_mes_ano(mes_ano_str):
+    try:
+        return datetime.strptime(mes_ano_str, "%m/%Y")
+    except ValueError:
+        return None

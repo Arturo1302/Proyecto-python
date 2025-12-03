@@ -2,7 +2,7 @@
 from utils.menus import *
 from utils.jsonFileHandler import *
 from tabulate import tabulate
-GASTOS_FILE = "./database/gastos.json"
+GASTOS_FILE = "database/gastos.json"
 
 options = (
     "Registrar nuevo gasto",
@@ -103,7 +103,7 @@ while True:
                             for gasto in dataGastos:
                                 tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
                             print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
-                            input("Presione Enter para volver al menu...")  
+                            print("Regresando al menu...") 
                             limpiar_pantalla()
                     case 2:
                         print("="*45)
@@ -120,11 +120,9 @@ while True:
                             for gasto in gastos_filtrados:
                                 tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
                             print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
-                            input("Presione Enter para volver al menu...")  
+                            print("Regresando al menu...") 
                             limpiar_pantalla()
 
-
-                            
                     case 3:
                         print("="*45)
                         print("----- Filtrar Gastos por Rango de Fechas -----")
@@ -146,7 +144,7 @@ while True:
                                 for gasto in gastos_filtrados:
                                     tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
                                 print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
-                                input("Presione Enter para volver al menu...")  
+                                print("Regresando al menu...")  
                                 limpiar_pantalla()
                     case 4:
                         break
@@ -159,16 +157,53 @@ while True:
                         print("="*45)
                         print("--------- Calcular Total Diario ---------")
                         print("="*45)
-                        dataGastos = readFile(GASTOS_FILE)
+                        total_gastos_diario = 0
+                        fecha_consulta = input("Ingrese la fecha para calcular el total (DD/MM/AAAA): ")
+                        if not validar_fecha(fecha_consulta):
+                            print("Error: Formato de fecha invalido. Use DD/MM/AAAA")   
+                        else:
+                            dataGastos = readFile(GASTOS_FILE)
+                            for gasto in dataGastos:
+                                if gasto['Fecha'] == fecha_consulta:
+                                    total_gastos_diario += gasto['Monto']
+                            print(f"El total de gastos en la fecha {fecha_consulta} es: ${total_gastos_diario:.2f}")
+                            print("Regresando al menu...")  
+                            limpiar_pantalla()
                         
                     case 2:
                         print("="*45)
                         print("-------- Calcular Total Semanal --------")
                         print("="*45)
+                        fecha_inicio = input("Ingrese la fecha de inicio (DD/MM/AAAA): ")   
+                        fecha_fin = input("Ingrese la fecha de fin (DD/MM/AAAA): ")
+                        if not validar_fecha(fecha_inicio) or not validar_fecha(fecha_fin):
+                            print("Error: Formato de fecha invalido. Use DD/MM/AAAA")   
+                        else:
+                            total_gastos_semanal = 0
+                            dataGastos = readFile(GASTOS_FILE)
+                            for gasto in dataGastos:
+                                if fecha_inicio <= gasto['Fecha'] <= fecha_fin:
+                                    total_gastos_semanal += gasto['Monto']
+                            print(f"El total de gastos entre {fecha_inicio} y {fecha_fin} es: ${total_gastos_semanal:.2f}")
+                            print("Regresando al menu...")  
+                            limpiar_pantalla()  
                     case 3:
                         print("="*45)
                         print("-------- Calcular Total Mensual --------")
                         print("="*45)   
+                        mes_filtrar = input("Ingrese el mes y año para el reporte (MM/AAAA): ")
+                        if not validar_mes_ano(mes_filtrar):
+                            print("Error: Formato invalido. Use MM/AAAA") 
+                        else :
+                            total_gastos_mensual = 0
+                            dataGastos = readFile(GASTOS_FILE)
+                            for gasto in dataGastos:
+                                fecha_gasto = validar_fecha(gasto['Fecha'])
+                                if fecha_gasto and fecha_gasto.strftime("%m/%Y") == mes_filtrar:
+                                    total_gastos_mensual += gasto['Monto']
+                            print(f"El total de gastos en el mes {mes_filtrar} es: ${total_gastos_mensual:.2f}")
+                            print("Regresando al menu...") 
+                            limpiar_pantalla()
                     case 4:
                         break    
         case 4:
@@ -195,10 +230,9 @@ while True:
                                 tabla_datos =[]
                                 for gasto in gastos_dia:
                                     tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
-                                print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
-                                input("Presione Enter para volver al menu...")  
+                                print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))  
+                                print("Regresando al menu...")
                                 limpiar_pantalla()
-                        readFile(GASTOS_FILE)
                         
                     case 2:
                         print("="*45)
@@ -221,15 +255,34 @@ while True:
                                 for gasto in gastos_semana:
                                     tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
                                 print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
-                                input("Presione Enter para volver al menu...")  
+                                print("Regresando al menu...") 
                                 limpiar_pantalla()
                     case 3:
                         print("="*45)
                         print("---------- Reporte Mensual -----------")
-                        print("="*45)   
+                        print("="*45) 
+                        mes_filtrar = input("Ingrese el mes y año para el reporte (MM/AAAA): ")
+                        if not validar_mes_ano(mes_filtrar):
+                            print("Error: Formato invalido. Use MM/AAAA")   
+                        else:   
+                            gastos_mes = []
+                            dataGastos = readFile(GASTOS_FILE)
+                            for gasto in dataGastos:
+                                fecha_gasto = validar_fecha(gasto['Fecha'])
+                                if fecha_gasto and fecha_gasto.strftime("%m/%Y") == mes_filtrar:
+                                    gastos_mes.append(gasto)
+                            if not gastos_mes:
+                                print(f"No hay gastos registrados en el mes {mes_filtrar}.")
+                            else:
+                                tabla_datos =[]
+                                for gasto in gastos_mes:
+                                    tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
+                                print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
+                                print("Regresando al menu...")   
+                                limpiar_pantalla()
                     case 4:
                         break    
         case 5:
-            print("Gracias por usar el simulador de gastos personales. ¡Hasta luego!")
+            print("Gracias por usar el simulador de gastos personales. Chao!!!")
             break
  

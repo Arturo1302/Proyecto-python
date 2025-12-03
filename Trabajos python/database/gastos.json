@@ -1,0 +1,26 @@
+[
+    {
+        "Monto": 12121.0,
+        "Categoria": "Comida",
+        "Descripcion": "daadad",
+        "Fecha": "21/12/2025"
+    },
+    {
+        "Monto": 122000.0,
+        "Categoria": "Comida",
+        "Descripcion": "loquera",
+        "Fecha": "1/12/2025"
+    },
+    {
+        "Monto": 20000.0,
+        "Categoria": "Transporte",
+        "Descripcion": "taxis",
+        "Fecha": "13/11/2025"
+    },
+    {
+        "Monto": 20000.0,
+        "Categoria": "Comida",
+        "Descripcion": "01/12/2025",
+        "Fecha": "01/12/2025"
+    }
+]
