@@ -129,6 +129,25 @@ while True:
                         print("="*45)
                         print("----- Filtrar Gastos por Rango de Fechas -----")
                         print("="*45)
+                        fecha_inicio = input("Ingrese la fecha de inicio (DD/MM/AAAA): ")
+                        fecha_fin = input("Ingrese la fecha de fin (DD/MM/AAAA): ")
+                        if not validar_fecha(fecha_inicio) or not validar_fecha(fecha_fin):
+                            print("Error: Formato de fecha invalido. Use DD/MM/AAAA")
+                        else:
+                            dataGastos = readFile(GASTOS_FILE)
+                            gastos_filtrados = []
+                            for gasto in dataGastos:
+                                if fecha_inicio <= gasto['Fecha'] <= fecha_fin:
+                                    gastos_filtrados.append(gasto)
+                            if not gastos_filtrados:
+                                print(f"No hay gastos registrados entre {fecha_inicio} y {fecha_fin}.")
+                            else:
+                                tabla_datos =[]
+                                for gasto in gastos_filtrados:
+                                    tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
+                                print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
+                                input("Presione Enter para volver al menu...")  
+                                limpiar_pantalla()
                     case 4:
                         break
         case 3:
@@ -161,10 +180,49 @@ while True:
                         print("="*45)
                         print("----------- Reporte Diario ------------")
                         print("="*45)
+                        fecha = input("Ingrese la fecha para el reporte (DD/MM/AAAA): ")
+                        if not validar_fecha(fecha):
+                            print("Error: Formato de fecha invalido. Use DD/MM/AAAA")
+                        else:
+                            gastos_dia = []
+                            dataGastos = readFile(GASTOS_FILE)
+                            for gasto in dataGastos:
+                                if gasto['Fecha'] == fecha:
+                                    gastos_dia.append(gasto)
+                            if not gastos_dia:
+                                print(f"No hay gastos registrados en la fecha {fecha}.")
+                            else:
+                                tabla_datos =[]
+                                for gasto in gastos_dia:
+                                    tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
+                                print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
+                                input("Presione Enter para volver al menu...")  
+                                limpiar_pantalla()
+                        readFile(GASTOS_FILE)
+                        
                     case 2:
                         print("="*45)
                         print("---------- Reporte Semanal -----------")    
                         print("="*45)
+                        fecha_inicio = input("Ingrese la fecha de inicio (DD/MM/AAAA): ")
+                        fecha_fin = input("Ingrese la fecha de fin (DD/MM/AAAA): ")
+                        if not validar_fecha(fecha_inicio) or not validar_fecha(fecha_fin):
+                            print("Error: Formato de fecha invalido. Use DD/MM/AAAA")
+                        else:
+                            gastos_semana = []
+                            dataGastos = readFile(GASTOS_FILE)
+                            for gasto in dataGastos:
+                                if fecha_inicio <= gasto['Fecha'] <= fecha_fin:
+                                    gastos_semana.append(gasto)
+                            if not gastos_semana:
+                                print(f"No hay gastos registrados entre {fecha_inicio} y {fecha_fin}.")
+                            else:
+                                tabla_datos =[]
+                                for gasto in gastos_semana:
+                                    tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
+                                print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
+                                input("Presione Enter para volver al menu...")  
+                                limpiar_pantalla()
                     case 3:
                         print("="*45)
                         print("---------- Reporte Mensual -----------")
