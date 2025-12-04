@@ -32,7 +32,7 @@ options4 = (
     "Volver al menu principal"
 )
 while True:
-    choice =menu_principal("Simulador de Gastos Personales", options)
+    choice =menu("Simulador de Gastos Personales", options)
     limpiar_pantalla()
     match choice:
         case 1: 
@@ -88,7 +88,7 @@ while True:
             limpiar_pantalla()    
         case 2:    
             while True:
-                choice=(listar_gastos("Listado de Gastos", options2))
+                choice=(menu("Listado de Gastos", options2))
                 limpiar_pantalla()
                 match choice:
                     case 1:
@@ -150,7 +150,7 @@ while True:
                         break
         case 3:
             while True:
-                choice = calcular_total_gastos("Calcular Total de Gastos", options3)
+                choice = menu("Calcular Total de Gastos", options3)
                 limpiar_pantalla()
                 match choice:
                     case 1:
@@ -208,7 +208,7 @@ while True:
                         break    
         case 4:
             while True:               
-                choice = generar_reporte("Generar Reporte de Gastos", options4)
+                choice = menu("Generar Reporte de Gastos", options4)
                 limpiar_pantalla()
                 match choice:
                     case 1:     
