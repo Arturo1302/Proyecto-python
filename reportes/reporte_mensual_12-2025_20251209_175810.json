@@ -1,0 +1,15 @@
+{
+    "tipo_reporte": "mensual",
+    "periodo": "12-2025",
+    "fecha_generacion": "09/12/2025 17:58:10",
+    "total_gastos": 12000.0,
+    "cantidad_registros": 1,
+    "gastos": [
+        {
+            "Monto": 12000.0,
+            "Categoria": "Comida",
+            "Descripcion": "hambre",
+            "Fecha": "03/12/2025"
+        }
+    ]
+}

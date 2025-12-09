@@ -1,8 +1,10 @@
-
 from utils.menus import *
 from utils.jsonFileHandler import *
 from tabulate import tabulate
+from datetime import datetime
+
 GASTOS_FILE = "database/gastos.json"
+REPORTES_DIR = "reportes/"
 
 options = (
     "Registrar nuevo gasto",
@@ -31,6 +33,33 @@ options4 = (
     "Reporte mensual",
     "Volver al menu principal"
 )
+
+def guardar_reporte(reporte_data, tipo_reporte, periodo):
+    """Guarda el reporte en un archivo JSON"""
+    respuesta = input("\n¿Desea guardar este reporte en un archivo JSON? (S/N): ").upper()
+    
+    if respuesta == 'S':
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        nombre_archivo = f"{REPORTES_DIR}reporte_{tipo_reporte}_{periodo}_{timestamp}.json"
+        
+        reporte_completo = {
+            "tipo_reporte": tipo_reporte,
+            "periodo": periodo,
+            "fecha_generacion": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+            "total_gastos": sum(gasto['Monto'] for gasto in reporte_data),
+            "cantidad_registros": len(reporte_data),
+            "gastos": reporte_data
+        }
+        
+        # Guardar sin mostrar el mensaje de "gasto guardado"
+        import os
+        os.makedirs(os.path.dirname(nombre_archivo), exist_ok=True)
+        with open(nombre_archivo, "w") as jsonFile:
+            from json import dumps
+            jsonFile.write(dumps(reporte_completo, indent=4))
+        
+        print(f"\n✓ Reporte guardado exitosamente en: {nombre_archivo}")
+
 while True:
     choice =menu("Simulador de Gastos Personales", options)
     limpiar_pantalla()
@@ -228,9 +257,16 @@ while True:
                                 print(f"No hay gastos registrados en la fecha {fecha}.")
                             else:
                                 tabla_datos =[]
+                                total = 0
                                 for gasto in gastos_dia:
                                     tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
-                                print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))  
+                                    total += gasto['Monto']
+                                print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
+                                print(f"\nTotal del día: ${total:.2f}")
+                                
+                                # Opción para guardar el reporte
+                                guardar_reporte(gastos_dia, "diario", fecha.replace('/', '-'))
+                                
                                 print("Regresando al menu...")
                                 limpiar_pantalla()
                         
@@ -252,9 +288,17 @@ while True:
                                 print(f"No hay gastos registrados entre {fecha_inicio} y {fecha_fin}.")
                             else:
                                 tabla_datos =[]
+                                total = 0
                                 for gasto in gastos_semana:
                                     tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
+                                    total += gasto['Monto']
                                 print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
+                                print(f"\nTotal de la semana: ${total:.2f}")
+                                
+                                # Opción para guardar el reporte
+                                periodo = f"{fecha_inicio.replace('/', '-')}_a_{fecha_fin.replace('/', '-')}"
+                                guardar_reporte(gastos_semana, "semanal", periodo)
+                                
                                 print("Regresando al menu...") 
                                 limpiar_pantalla()
                     case 3:
@@ -275,9 +319,16 @@ while True:
                                 print(f"No hay gastos registrados en el mes {mes_filtrar}.")
                             else:
                                 tabla_datos =[]
+                                total = 0
                                 for gasto in gastos_mes:
                                     tabla_datos.append([gasto['Monto'], gasto['Categoria'], gasto['Descripcion'], gasto['Fecha']])
+                                    total += gasto['Monto']
                                 print(tabulate(tabla_datos, headers=["Monto", "Categoria", "Descripcion", "Fecha"], tablefmt="fancy_grid"))
+                                print(f"\nTotal del mes: ${total:.2f}")
+                                
+                                # Opción para guardar el reporte
+                                guardar_reporte(gastos_mes, "mensual", mes_filtrar.replace('/', '-'))
+                                
                                 print("Regresando al menu...")   
                                 limpiar_pantalla()
                     case 4:
@@ -285,4 +336,4 @@ while True:
         case 5:
             print("Gracias por usar el simulador de gastos personales. Chao!!!")
             break
- 
+        
