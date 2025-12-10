@@ -4,5 +4,17 @@
         "Categoria": "Comida",
         "Descripcion": "hambre",
         "Fecha": "03/12/2025"
+    },
+    {
+        "Monto": 201000.0,
+        "Categoria": "Comida",
+        "Descripcion": "",
+        "Fecha": "11/12/2025"
+    },
+    {
+        "Monto": 100000.0,
+        "Categoria": "Salud",
+        "Descripcion": "",
+        "Fecha": "12/12/2025"
     }
 ]

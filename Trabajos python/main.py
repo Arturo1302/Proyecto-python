@@ -72,12 +72,16 @@ while True:
             while True:
                 try:    
                     monto_ingresado = float(input("Ingrese el monto del gasto: $"))
+                    gasto_maximodiario(monto_ingresado,0,200000)
+                    gasto_maximosemanal(monto_ingresado,0,1200000) 
                     if monto_ingresado <= 0:
                         print("Error: El monto debe ser mayor a 0")
                         continue
                     break
                 except ValueError:
                         print("Error: Debe ingresar un número válido")
+                 
+                        
 
             categoria_valida = ["Comida", "Transporte", "Gastos personales", "Salud", "Otros"]
             while True:
@@ -87,6 +91,7 @@ while True:
                 for categoria in categoria_valida:
                     if categoria_ingresada.lower() == categoria.lower():
                         categoria_encontrada = categoria
+                        gasto_maximocategoria(monto_ingresado,0,500000)
                         break
                 if categoria_encontrada:
                     categoria_ingresada = categoria_encontrada
@@ -332,8 +337,9 @@ while True:
                                 print("Regresando al menu...")   
                                 limpiar_pantalla()
                     case 4:
-                        break    
+                        break                    
         case 5:
             print("Gracias por usar el simulador de gastos personales. Chao!!!")
             break
+
         
